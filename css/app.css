@@ -170,6 +170,22 @@ h1 .star { opacity: 1; font-size: 18px; vertical-align: middle; margin-left: 6px
   .search kbd { display: none; }
 }
 
+/* Con i due interruttori (lingua e modalita') l'intestazione non ci sta piu'
+   sotto i 620px. Gli interruttori restano: sono la funzione che l'utente
+   cerca. Cede quello che si puo' ritrovare altrove. */
+@media (max-width: 620px) {
+  .search { display: none; }
+  .feed { display: none; }
+  .brand-txt { display: none; }
+  .seg.sw button { padding: 4px 7px; font-size: 10.5px; }
+}
+@media (max-width: 380px) {
+  .brand { display: none; }
+}
+
+/* Un tooltip aperto non deve allargare la pagina: resta dentro la colonna. */
+.tip-body { max-width: min(240px, calc(100vw - 32px)); }
+
 /* ============================================================
    Interruttori nell'intestazione
    ============================================================ */
@@ -256,6 +272,13 @@ h1 .star { opacity: 1; font-size: 18px; vertical-align: middle; margin-left: 6px
   display: flex; gap: var(--s3); align-items: flex-start; flex-wrap: wrap;
 }
 .disclaimer p {
-  flex: 1; min-width: 260px;
+  /* min-width fisso su un contenitore flex sfonda i viewport stretti:
+     era la causa di 69px di overflow a 390px. */
+  flex: 1 1 200px; min-width: 0;
   font-size: 11.5px; line-height: 1.6; color: var(--faint); max-width: 92ch;
+}
+.disclaimer .badge { white-space: normal; text-align: left; }
+@media (max-width: 560px) {
+  .disclaimer { gap: var(--s2); }
+  .disclaimer p { flex-basis: 100%; }
 }
