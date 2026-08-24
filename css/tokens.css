@@ -1,0 +1,76 @@
+/* ============================================================
+   Design system — Trader Intelligence
+   Terminal finanziario scuro. Ogni scelta ha una ragione:
+   il colore porta significato, non decorazione.
+   ============================================================ */
+
+:root {
+  /* --- superfici: quattro livelli, differenze minime ma percepibili --- */
+  --bg:        #0a0e15;
+  --surface:   #111823;
+  --surface-2: #161f2c;
+  --surface-3: #1c2736;
+  --border:    #202b3b;
+  --border-2:  #2b3849;
+
+  /* --- testo --- */
+  --text:      #e9eff8;
+  --text-2:    #aebbcd;
+  --muted:     #71809a;
+  --faint:     #4a5568;
+
+  /* --- semantica: verde e rosso SOLO per il segno del risultato --- */
+  --pos:       #2ad17f;
+  --pos-dim:   rgba(42,209,127,.12);
+  --neg:       #ff5f6d;
+  --neg-dim:   rgba(255,95,109,.12);
+  --warn:      #f5a524;
+  --warn-dim:  rgba(245,165,36,.12);
+  --crit:      #ff3b5c;
+
+  /* --- accento: interazione e identita', mai risultato --- */
+  --accent:    #4cc9f0;
+  --accent-2:  #6ee7f7;
+  --accent-dim: rgba(76,201,240,.10);
+  --accent-brd: rgba(76,201,240,.35);
+
+  /* --- livelli di rischio, distinguibili anche senza colore --- */
+  --sev-normal: #2ad17f;
+  --sev-warn:   #f5a524;
+  --sev-high:   #ff8a3d;
+  --sev-crit:   #ff3b5c;
+
+  /* --- tipografia --- */
+  --font: -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, Roboto, sans-serif;
+  --mono: ui-monospace, "SF Mono", "Cascadia Mono", Menlo, Consolas, monospace;
+
+  /* --- spaziature: scala di 4 --- */
+  --s1: 4px;  --s2: 8px;  --s3: 12px; --s4: 16px;
+  --s5: 24px; --s6: 32px; --s7: 48px; --s8: 64px;
+
+  --r1: 6px;  --r2: 10px; --r3: 14px; --r4: 20px;
+
+  --shadow-1: 0 1px 2px rgba(0,0,0,.4);
+  --shadow-2: 0 4px 16px rgba(0,0,0,.35);
+  --shadow-3: 0 12px 40px rgba(0,0,0,.5);
+
+  --header-h: 56px;
+  --sidebar-w: 216px;
+  --sidebar-w-min: 60px;
+
+  --t-fast: 120ms cubic-bezier(.4,0,.2,1);
+  --t-mid:  220ms cubic-bezier(.4,0,.2,1);
+  --t-slow: 420ms cubic-bezier(.22,1,.36,1);
+}
+
+/* Un solo tema, scelto: il terminal finanziario e' scuro per una ragione
+   pratica, non estetica. Si guarda per ore. */
+:root { color-scheme: dark; }
+
+/* Chi ha chiesto meno movimento lo ottiene davvero. */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: .001ms !important;
+    transition-duration: .001ms !important;
+  }
+}
