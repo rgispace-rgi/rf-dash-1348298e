@@ -33,7 +33,8 @@ const SIMPLE_COLS = [
   { k: 'what', tk: 'scol.what',   l: true, sort: false,
     fmt: t => `<span class="dim">${whatItDoes(t)}</span>` },
   { k: 'net',  tk: 'scol.earned',
-    fmt: t => t.net === null ? na() : `<span class="num ${F.sign(t.net)}">${F.pct(t.net, 0)}</span>` },
+    fmt: t => t.net === null ? na()
+      : `<span class="num ${F.sign(t.net)}">${F.big(t.net, 0)}</span>` },
   { k: 'dd',   tk: 'scol.lost',   fmt: tWorst },
   { k: 'risk', tk: 'scol.risk',   sort: false, fmt: tRisk },
   { k: 'age',  tk: 'scol.years',  fmt: t => F.days(t.age) ?? na() },
@@ -47,7 +48,7 @@ function tWorst(t) {
   if (t.dd === null || t.dd === undefined) return na();
   const left = Math.round(1000 * (1 + t.dd / 100));
   return `<span class="num neg">${F.pct(t.dd, 0)}</span>
-    <div class="sub-money">1 000 &rarr; ${left.toLocaleString('en-US').replace(/,/g, ' ')} &euro;</div>`;
+    <div class="sub-money">1 000 &rarr; ${F.int(left)} &euro;</div>`;
 }
 function tRisk(t) {
   const [sev, label] = riskLabel(t);
@@ -125,8 +126,8 @@ function kpis(meta, list) {
       <div class="kpi-lbl">${T('kpi.bestnet')}${isSimple() ? '' : tip('net')}</div>
       <div class="kpi-name">${esc(best?.name) || '–'} <span class="dim" style="font-weight:400">
         ${esc(best?.strategy) || ''}</span></div>
-      <div class="kpi-val pos">${F.pct(best?.net, 0) ?? '–'}</div>
-      <div class="kpi-sub">${T('kpi.gross')} ${F.pct(best?.ret, 0)} ·
+      <div class="kpi-val pos">${F.big(best?.net, 0) ?? '–'}</div>
+      <div class="kpi-sub">${F.isBig(best?.net) ? F.pct(best?.net, 0) + ' · ' : ''}${T('kpi.gross')} ${F.pct(best?.ret, 0)} ·
         ${T('kpi.commission')} ${F.num(best?.comm, 0)}% · ${T('col.dd')} ${F.pct(best?.dd, 1)}</div>
       <div class="kpi-spark">${sparkline(best?.spark, 190, 52)}</div>
     </div>

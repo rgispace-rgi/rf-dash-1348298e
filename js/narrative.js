@@ -15,7 +15,14 @@ const pick = row => row[I[lang()]] ?? row[0];
 /* Capitale di riferimento per tradurre le percentuali in denaro. */
 export const REF = 1000;
 
-const money = v => Math.round(v).toLocaleString('en-US').replace(/,/g, ' ');
+const NBSP = ' ';
+const grp = (x, dec = 0) => {
+  const neg = x < 0, fx = Math.abs(x).toFixed(dec);
+  let [i, f] = fx.split('.');
+  i = i.replace(/\B(?=(\d{3})+(?!\d))/g, NBSP);
+  return (neg ? '−' : '') + i + (f ? ',' + f : '');
+};
+const money = v => grp(v, 0);
 
 /* Ucraino e russo cambiano il sostantivo secondo il numero: 1 рік, 2 роки,
    5 років. Scrivere "6 роки" e' un errore che si nota subito, come
@@ -42,7 +49,11 @@ function qty(n, unit) {
   const forms = UNIT[unit][I[lang()]] ?? UNIT[unit][2];
   return n + ' ' + plural(n, forms);
 }
-const pc = (v, d = 0) => (v > 0 ? '+' : '') + v.toFixed(d) + '%';
+const pc = (v, d = 0) => (v > 0 ? '+' : '') + grp(v, d) + '%';
+/* Sopra il migliaio si dice "il capitale si e' moltiplicato per N":
+   e' l'unico modo in cui una cifra a cinque zeri diventa comprensibile. */
+const times = v => '×' + grp(1 + v / 100, Math.abs(v) >= 10000 ? 0 : 1);
+const retTxt = v => Math.abs(v) >= 1000 ? `${times(v)} (${pc(v)})` : pc(v);
 
 /* ---------- come opera ---------- */
 function style(t) {
@@ -113,9 +124,9 @@ export function summary(t) {
       tone: t.ret > 0 ? 'p' : 'n',
       h: pick(['Скільки заробив', 'Сколько заработал', 'Quanto ha guadagnato']),
       p: pick([
-        `За весь час стратегія дала ${pc(t.ret)}. Але трейдер бере собі ${commTxt} прибутку, тому вам залишилось би приблизно ${pc(t.net ?? t.ret)}. Простими словами: ${money(REF)} € перетворилися б приблизно на ${net ? money(net) : '—'} € — не на ${money(gross)} €, як показує сама платформа.`,
-        `За всё время стратегия дала ${pc(t.ret)}. Но трейдер берёт себе ${commTxt} прибыли, поэтому вам осталось бы примерно ${pc(t.net ?? t.ret)}. Простыми словами: ${money(REF)} € превратились бы примерно в ${net ? money(net) : '—'} € — а не в ${money(gross)} €, как показывает сама платформа.`,
-        `Da quando è attiva la strategia ha reso ${pc(t.ret)}. Ma il trader trattiene il ${commTxt} del profitto, quindi a te resterebbe circa ${pc(t.net ?? t.ret)}. In parole semplici: ${money(REF)} € sarebbero diventati circa ${net ? money(net) : '—'} € — non ${money(gross)} € come mostra la piattaforma.`
+        `За весь час стратегія дала ${retTxt(t.ret)}. Але трейдер бере собі ${commTxt} прибутку, тому вам залишилось би приблизно ${retTxt(t.net ?? t.ret)}. Простими словами: ${money(REF)} € перетворилися б приблизно на ${net ? money(net) : '—'} € — не на ${money(gross)} €, як показує сама платформа.`,
+        `За всё время стратегия дала ${retTxt(t.ret)}. Но трейдер берёт себе ${commTxt} прибыли, поэтому вам осталось бы примерно ${retTxt(t.net ?? t.ret)}. Простыми словами: ${money(REF)} € превратились бы примерно в ${net ? money(net) : '—'} € — а не в ${money(gross)} €, как показывает сама платформа.`,
+        `Da quando è attiva la strategia ha reso ${retTxt(t.ret)}. Ma il trader trattiene il ${commTxt} del profitto, quindi a te resterebbe circa ${retTxt(t.net ?? t.ret)}. In parole semplici: ${money(REF)} € sarebbero diventati circa ${net ? money(net) : '—'} € — non ${money(gross)} € come mostra la piattaforma.`
       ])
     });
   }
