@@ -282,3 +282,9 @@ h1 .star { opacity: 1; font-size: 18px; vertical-align: middle; margin-left: 6px
   .disclaimer { gap: var(--s2); }
   .disclaimer p { flex-basis: 100%; }
 }
+
+
+/* Il moltiplicatore e' un aiuto alla lettura, non il dato: sta sotto la
+   percentuale e ha meno peso visivo. */
+.kpi-sub .mult { color: var(--text-2); font-weight: 650; }
+.sub-money { font-variant-numeric: tabular-nums; }

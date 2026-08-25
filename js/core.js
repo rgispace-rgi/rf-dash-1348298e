@@ -41,10 +41,11 @@ export const F = {
 
   /* Sopra il migliaio la percentuale smette di comunicare: "+12 062%" resta
      difficile da afferrare, "x121" si capisce subito. */
-  big(v, dec) {
+  /* La percentuale resta la cifra principale: e' il dato che conta.
+     Il moltiplicatore e' solo un aiuto alla lettura e sta sotto. */
+  mult(v) {
     if (v === null || v === undefined || Number.isNaN(v)) return null;
-    if (Math.abs(v) >= 1000) return '×' + group(1 + v / 100, (Math.abs(v) >= 10000 ? 0 : 1));
-    return F.pct(v, dec);
+    return '×' + group(1 + v / 100, (Math.abs(v) >= 10000 ? 0 : 1));
   },
   isBig(v) { return v !== null && v !== undefined && Math.abs(v) >= 1000; },
 

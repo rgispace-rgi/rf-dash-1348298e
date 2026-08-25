@@ -53,7 +53,7 @@ const pc = (v, d = 0) => (v > 0 ? '+' : '') + grp(v, d) + '%';
 /* Sopra il migliaio si dice "il capitale si e' moltiplicato per N":
    e' l'unico modo in cui una cifra a cinque zeri diventa comprensibile. */
 const times = v => '×' + grp(1 + v / 100, Math.abs(v) >= 10000 ? 0 : 1);
-const retTxt = v => Math.abs(v) >= 1000 ? `${times(v)} (${pc(v)})` : pc(v);
+const retTxt = v => Math.abs(v) >= 1000 ? `${pc(v)} (${times(v)})` : pc(v);
 
 /* ---------- come opera ---------- */
 function style(t) {

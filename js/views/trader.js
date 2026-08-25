@@ -90,7 +90,7 @@ export async function renderTrader(view, id) {
 
   <div class="sec">
     <div class="mgrid card">
-      ${metric(T('tr.strategyret'), t.ret === null ? null : `<span class="${F.sign(t.ret)}">${F.big(t.ret, 1)}</span>`, t.retOwn !== null ? T('p.ourtwr', { x: F.pct(t.retOwn, 1) }) : '')}
+      ${metric(T('tr.strategyret'), t.ret === null ? null : `<span class="${F.sign(t.ret)}">${F.pct(t.ret, 1)}</span>`, t.retOwn !== null ? T('p.ourtwr', { x: F.pct(t.retOwn, 1) }) : '')}
       ${metric(T('tr.netret'), sp(t.net, 1), T('p.aftercomm', { x: F.num(t.comm, 0) }), 'net')}
       ${metric(T('tr.maxdd'), sp(t.dd, 1), '', 'dd')}
       ${metric(T('p.sharpe'), t.sharpe === null ? null : F.num(t.sharpe), t.extremeVol ? '⚠ extreme volatility' : '', 'sharpe')}
@@ -388,9 +388,9 @@ function renderSimple(view, t, d, curve, id) {
   <div class="s-nums">
     <div class="s-num">
       <div class="k">${T('scol.earned')}</div>
-      <div class="v ${F.sign(t.net)}">${F.big(t.net, 0) ?? '\u2014'}</div>
+      <div class="v ${F.sign(t.net)}">${F.pct(t.net, 0) ?? '\u2014'}</div>
       <div class="x">1\u202f000\u202f\u20ac \u2192 ${t.net === null ? '\u2014'
-        : F.int(Math.round(1000 * (1 + t.net / 100))) + '\u202f\u20ac'}${F.isBig(t.net) ? ' \u00b7 ' + F.pct(t.net, 0) : ''}</div>
+        : F.int(Math.round(1000 * (1 + t.net / 100))) + '\u202f\u20ac'}${F.isBig(t.net) ? ' \u00b7 ' + F.mult(t.net) : ''}</div>
     </div>
     <div class="s-num">
       <div class="k">${T('scol.lost')}</div>
