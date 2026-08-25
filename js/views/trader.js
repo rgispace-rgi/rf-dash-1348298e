@@ -92,7 +92,9 @@ export async function renderTrader(view, id) {
     <div class="mgrid card">
       ${metric(T('tr.strategyret'), t.ret === null ? null : `<span class="${F.sign(t.ret)}">${F.pct(t.ret, 1)}</span>`, t.retOwn !== null ? T('p.ourtwr', { x: F.pct(t.retOwn, 1) }) : '')}
       ${metric(T('tr.netret'), sp(t.net, 1), T('p.aftercomm', { x: F.num(t.comm, 0) }), 'net')}
-      ${metric(T('tr.maxdd'), sp(t.dd, 1), '', 'dd')}
+      ${metric(T('tr.maxdd'), sp(t.dd, 1),
+          t.ddOwn !== null && t.ddPlat !== null && Math.abs(t.ddOwn - t.ddPlat) > 1
+            ? T('p.ddboth', { a: F.pct(t.ddOwn, 1) }) : '', 'dd')}
       ${metric(T('p.sharpe'), t.sharpe === null ? null : F.num(t.sharpe), t.extremeVol ? '⚠ extreme volatility' : '', 'sharpe')}
       ${metric(T('p.sortino'), t.sortino === null ? null : F.num(t.sortino), '', 'sortino')}
       ${metric(T('p.calmar'), t.calmar === null ? null : F.num(t.calmar), t.calmar === null ? T('p.needs1y') : '', 'calmar')}
@@ -106,6 +108,8 @@ export async function renderTrader(view, id) {
       ${metric(T('p.instr'), t.nSym, t.topSym ? `${t.topSym} ${F.num(t.topSymPct, 0)}%` : '', 'hhi')}
       ${metric(T('p.recovery'), t.recovery === null ? null : F.num(t.recovery))}
       ${metric(T('p.posmonths'), t.consistency === null ? null : F.num(t.consistency, 0) + '%')}
+      ${metric(T('p.profitusd'), t.profitUsd === null ? null : F.num(t.profitUsd, 2) + ' $',
+          t.balance ? T('p.balance') + ' ' + F.num(t.balance, 2) + ' $' : '')}
     </div>
   </div>
 

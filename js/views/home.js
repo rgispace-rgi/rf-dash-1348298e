@@ -89,14 +89,18 @@ function tConf(t) {
 }
 function tFlags(t) {
   const f = [];
-  if (t.wiped) f.push(`<span class="badge bad" title="La curva ha toccato -95% o peggio: conto azzerato e ricapitalizzato">ZERO</span>`);
-  if (t.noDD) f.push(`<span class="badge warn" title="Nessun giorno negativo in tutta la storia: la curva mostra solo il realizzato, le perdite aperte non compaiono">NO-DD</span>`);
-  if (t.badSharpe) f.push(`<span class="badge warn" title="Sharpe oltre 8: non si osserva nel trading reale con rischio reale">SR!</span>`);
-  if (t.mart >= 60) f.push(`<span class="badge bad" title="Pattern compatibili con martingala">MART</span>`);
-  if (t.extremeVol) f.push(`<span class="badge warn" title="Volatilità annua oltre il 100%">VOL</span>`);
-  if (t.slippage) f.push(`<span class="badge mute" title="Durata mediana sotto i 15 minuti">HFT</span>`);
-  if (t.check === 'INCOMPLETE_HISTORY') f.push(`<span class="badge mute" title="Lo storico non copre tutta la curva">PART</span>`);
-  if (t.check === 'VALIDATED') f.push(`<span class="badge ok" title="Il nostro TWR coincide con la piattaforma">✓</span>`);
+  /* I title sono attributi HTML: non compaiono nel testo renderizzato, per
+     questo erano sfuggiti al controllo delle traduzioni. */
+  const b = (cls, tk, txt) => f.push(`<span class="badge ${cls}" title="${T(tk)}">${txt}</span>`);
+  if (t.wiped) b('bad', 'flag.zero', 'ZERO');
+  if (t.ddHidden) b('bad', 'flag.ddhidden', 'DD!');
+  if (t.noDD) b('warn', 'flag.nodd', 'NO-DD');
+  if (t.badSharpe) b('warn', 'flag.sr', 'SR!');
+  if (t.mart >= 60) b('bad', 'flag.mart', 'MART');
+  if (t.extremeVol) b('warn', 'flag.vol', 'VOL');
+  if (t.slippage) b('mute', 'flag.hft', 'HFT');
+  if (t.check === 'INCOMPLETE_HISTORY') b('mute', 'flag.part', 'PART');
+  if (t.check === 'VALIDATED') b('ok', 'flag.ok', '✓');
   return f.join(' ') || '<span class="faint">–</span>';
 }
 const esc = s => (s || '').replace(/[<>&]/g, c => ({ '<': '&lt;', '>': '&gt;', '&': '&amp;' }[c]));

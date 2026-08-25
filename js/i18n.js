@@ -330,6 +330,14 @@ const D = {
   'sc.cons':     ['Стабільність', 'Стабильность', 'Costanza'],
   'sc.strat':    ['Стратегія', 'Стратегия', 'Strategia'],
   'sc.conf':     ['Довіра до даних', 'Доверие к данным', 'Fiducia nei dati'],
+  'p.ddboth':    ['за даними RoboForex · наша крива показує {a}',
+                  'по данным RoboForex · наша кривая показывает {a}',
+                  'dato RoboForex · la nostra curva mostra {a}'],
+  'p.profitusd': ['Прибуток у доларах', 'Прибыль в долларах', 'Profitto in dollari'],
+  'p.balance':   ['баланс', 'баланс', 'saldo'],
+  'flag.ddhidden': ['Наша крива показує менше половини реального падіння: збиток існує, але ще не зафіксований',
+                    'Наша кривая показывает меньше половины реального падения: убыток есть, но ещё не зафиксирован',
+                    'La nostra curva mostra meno della metà del calo reale: la perdita esiste ma non è ancora realizzata'],
 
   /* ---------------- avvertenza di legge ---------------- */
   'disc': ['Аналіз минулих результатів. Минула дохідність не гарантує майбутньої. Це не інвестиційна порада. Дані зібрані з RoboForex CopyFX і перераховані незалежно; можливі помилки.',
