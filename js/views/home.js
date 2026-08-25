@@ -94,6 +94,7 @@ function tFlags(t) {
   const b = (cls, tk, txt) => f.push(`<span class="badge ${cls}" title="${T(tk)}">${txt}</span>`);
   if (t.wiped) b('bad', 'flag.zero', 'ZERO');
   if (t.ddHidden) b('bad', 'flag.ddhidden', 'DD!');
+  if (t.flowDriven) b('warn', 'flag.flow', 'FLOW');
   if (t.noDD) b('warn', 'flag.nodd', 'NO-DD');
   if (t.badSharpe) b('warn', 'flag.sr', 'SR!');
   if (t.mart >= 60) b('bad', 'flag.mart', 'MART');

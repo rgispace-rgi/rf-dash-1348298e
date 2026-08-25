@@ -136,6 +136,11 @@ export async function renderTrader(view, id) {
   </div>
 
   <div class="g2" style="margin-top:12px">
+    <div class="card"><div class="card-hd"><h3>${T('p.origin')}</h3></div>
+      <div class="card-bd" id="originBox"></div></div>
+  </div>
+
+  <div class="g2" style="margin-top:12px">
     <div class="card"><div class="card-hd"><h3>${T('tr.strategy')}</h3></div>
       <div class="card-bd" id="stratBox"></div></div>
     <div class="card"><div class="card-hd"><h3>${T('tr.dataconf')}</h3></div>
@@ -161,6 +166,7 @@ export async function renderTrader(view, id) {
     e.currentTarget.classList.toggle('on', Watch.toggle(id));
 
   if (curve) drawPerf(view, curve, t);
+  drawOrigin(view, t);
   if (detail) {
     drawHeat(view, detail);
     drawEcon(view, t, detail);
@@ -251,6 +257,37 @@ function drawEcon(view, t, d) {
       ${d.offers.map(o => `<div class="econ-row small"><span>${o.from || o.seen}</span>
         <b>${F.num(o.rate, 0)}%</b></div>`).join('')}
       <div class="dim" style="font-size:11px;margin-top:6px">${T('p.offernote')}</div></div>` : ''}`;
+}
+
+/* Il rendimento percentuale ignora i movimenti di capitale — verificato.
+   Ma il saldo li contiene: un conto grande puo' essere il risultato di denaro
+   versato, non di bravura. Questo riquadro separa le due cose. */
+function drawOrigin(view, t) {
+  const box = view.querySelector('#originBox');
+  if (!box) return;
+  const trad = t.tradingPnl ?? 0, inn = t.flowIn ?? 0, out = t.flowOut ?? 0;
+  const tot = Math.abs(trad) + Math.abs(inn) + Math.abs(out);
+  if (!tot) { box.innerHTML = `<div class="empty"><p>${F.na()}</p></div>`; return; }
+  const pct = v => (Math.abs(v) / tot * 100);
+  box.innerHTML = `
+    ${t.flowKnown ? '' : `<div class="warnbox" style="margin-bottom:10px">${T('p.flowunknown')}</div>`}
+    <div class="econ-row"><span>${T('p.fromtrade')}</span>
+      <b class="${F.sign(trad)}">${t.flowKnown ? F.num(trad, 0) + ' $' : F.na()}</b></div>
+    <div class="econ-row"><span>${T('p.fromflow')}</span>
+      <b class="${inn > 0 ? 'warn' : ''}">${F.num(inn, 0)} $</b></div>
+    <div class="econ-row"><span>${T('p.withdrawn')}</span>
+      <b>${F.num(out, 0)} $</b></div>
+    <div class="econ-bar" style="margin-top:12px">
+      <i style="width:${pct(trad)}%;background:${trad >= 0 ? 'var(--pos)' : 'var(--neg)'}"></i>
+      <i style="width:${pct(inn)}%;background:var(--warn)"></i>
+      <i style="width:${pct(out)}%;background:var(--faint)"></i>
+    </div>
+    <div class="econ-legend">
+      <span><i style="background:var(--pos)"></i>${T('p.fromtrade')}</span>
+      <span><i style="background:var(--warn)"></i>${T('p.fromflow')}</span>
+    </div>
+    ${t.flowDriven ? `<div class="warnbox" style="margin-top:12px">${T('flag.flow')}</div>` : ''}
+    <div class="dim" style="font-size:11px;margin-top:10px;line-height:1.5">${T('p.originnote')}</div>`;
 }
 
 function drawStrategy(view, t, d) {
